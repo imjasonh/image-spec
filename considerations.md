@@ -3,6 +3,9 @@
 Implementations that are reading/processing [manifests](manifest.md) or [image indexes](image-index.md) MUST NOT generate an error if they encounter an unknown property.
 Instead they MUST ignore unknown properties.
 
+Note: A previously unknown field MAY gain new semantic meaning and corresponding validation in future revisions of this spec.
+This means that an unknown property that was simply ignored by an implementation yesterday MAY have new or different validation logic applied to it in the future, and MAY be rejected or interpreted differently as a result.
+
 # Canonicalization
 
 * OCI Images are [content-addressable](https://en.wikipedia.org/wiki/Content-addressable_storage). See [descriptors](descriptor.md) for more.
