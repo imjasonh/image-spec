@@ -19,7 +19,7 @@ For the media type(s) that this is compatible with see the [matrix](media-types.
 
 - **`artifactType`** *string*
 
-  This property SHOULD be used and contain the mediaType of the referenced artifact.
+  This property SHOULD be used and contain the mediaType of the artifact.
   If defined, the value MUST comply with [RFC 6838][rfc6838], including the [naming requirements in its section 4.2][rfc6838-s4.2], and MAY be registered with [IANA][iana].
 
 - **`blobs`** *array of objects*
