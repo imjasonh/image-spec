@@ -11,9 +11,10 @@ This guidance aims to serve three primary goals:
 ## Scope
 
 This guidance relies on implementations' support for [OCI Artifacts][artifacts].
-The OCI Artifacts spec is currently specified in OCI image-spec v1.1.0-rc2, and as such is not considered "final".
+The OCI Artifacts spec is introduced in OCI image-spec v1.1.
 
-A [previous version of this guidance][previous] referred to using the [OCI Image Manifest][image] to describe non-image content.
+For compatibility with implementations that don't yet support v1.1 of the spec, see [Using OCI Images](#using-oci-images) below.
+In general, new artifact types should prefer to use OCI Artifacts where available.
 
 ## Defining a Unique Artifact Type
 
@@ -28,7 +29,7 @@ This is done by choosing a descriptive, unique `artifactType`.
 Artifact authors should not use the `vnd.oci` prefix, as these are reserved for types defined in Open Container Initiative (OCI) specifications and MUST NOT be used by other specifications and extensions.
 
 Artifact types may include version information (`v3`) and data encoding information (`+json`).
-These communicate to implementations how they should interpret the data found in other fields, such as `blobs`, [`annotations`][annotations] or the `subject` [descriptor][descriptor].
+These communicate to implementations how they should interpret the data found in other fields, such as `blobs` or [`annotations`][annotations].
 
 Artifact types and blob `mediaType`s that may change should define a version to future-proof new enhancements.
 
@@ -61,14 +62,32 @@ Blobs may be shared across different instances of an artifact as they're persist
 
 Artifact authors may use existing [pre-defined annotation keys][annotations-pre] where appropriate, or define their new keys, following the [rules][rules] outlined in the spec.
 
-[annotations]:       https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/annotations.md
-[annotations-pre]:   https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/annotations.md#pre-defined-annotation-keys
-[annotations-rules]: https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/annotations.md#rules
-[artifacts]:         https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/artifact.md
-[descriptor]:        https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/descriptor.md
+## Using OCI Images
+
+OCI Images have also been used historically to represent non-image content, especially before OCI Artifacts were included in the spec.
+
+For compatibility with implementations that don't yet support OCI Artifacts, artifact authors may choose to implement storage of non-image content in an OCI registry.
+In this scheme, OCI Images' `layers` map roughly to OCI Artifacts' `blobs`, where the layers' `mediaType`s may not be the standard OCI Layer media type.
+OCI Images' `.config.mediaType` maps roughly to OCI Artifacts' `artifactType`.
+
+Examples of non-image contents represented in OCI Images include:
+
+- [Helm charts](https://helm.sh/docs/topics/registries/)
+- [Crossplane packages](https://docs.upbound.io/uxp/crossplane-concepts/packages/)
+- [Sigstore](https://sigstore.dev):
+  - [signatures](https://github.com/sigstore/cosign/blob/main/specs/SIGNATURE_SPEC.md)
+  - [SBOMs](https://github.com/sigstore/cosign/blob/main/specs/SBOM_SPEC.md)
+  - [attestations](https://github.com/sigstore/cosign/blob/main/specs/ATTESTATION_SPEC.md)
+- [Tekton bundles](https://tekton.dev/docs/pipelines/tekton-bundle-contracts/)
+- [Singularity filesystem bundles](https://docs.sylabs.io/guides/3.1/user-guide/oci_runtime.html)
+
+[annotations]:       https://github.com/opencontainers/image-spec/blob/v1.1/annotations.md
+[annotations-pre]:   https://github.com/opencontainers/image-spec/blob/v1.1/annotations.md#pre-defined-annotation-keys
+[annotations-rules]: https://github.com/opencontainers/image-spec/blob/v1.1/annotations.md#rules
+[artifacts]:         https://github.com/opencontainers/image-spec/blob/v1.1/artifact.md
+[descriptor]:        https://github.com/opencontainers/image-spec/blob/v1.1/descriptor.md
 [iana]:              https://www.iana.org/assignments/media-types/media-types.xhtml
-[image]:             https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/manifest.md
-[media-types]:       https://github.com/opencontainers/image-spec/blob/v1.1.0-rc2/media-types.md
-[previous]:          https://github.com/opencontainers/artifacts/blob/main/artifact-authors.md
+[image]:             https://github.com/opencontainers/image-spec/blob/v1.1/manifest.md
+[media-types]:       https://github.com/opencontainers/image-spec/blob/v1.1/media-types.md
 [rfc6838-s4.2]:      https://tools.ietf.org/html/rfc6838#section-4.2
 [rfc6838]:           https://tools.ietf.org/html/rfc6838
